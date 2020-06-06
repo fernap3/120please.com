@@ -1,0 +1,236 @@
+<html>
+	<head>
+		<style>
+			@keyframes spin {
+				from { transform: none;	}
+				to { transform: rotate(360deg);	}
+			}
+			@keyframes scroll-sonic {
+				from { transform: translateX(0); }
+				to { transform: translateX(-64000px); }
+			}
+			@keyframes spin-cube {
+				from { transform: rotateX(0) rotateY(0); }
+				to { transform: rotateX(360deg) rotateY(360deg); }
+			}
+			body {
+				display: grid;
+				grid-template-rows: 140px auto;
+				margin: 0;
+				height: 100%;
+				font-family: Roboto, sans-serif;
+				color: #262626;
+			}
+			.topbar {
+				padding: 20px;
+				display: grid;
+				grid-template-rows: 1fr 1fr;
+				grid-row-gap: 10px;
+			}
+			.test-area {
+				display: flex;
+				align-items: center;
+				justify-content: center;
+			}
+			.test-area--vertical {
+				flex-direction: column;
+			}
+			.test-square {
+				height: 200px;
+				width: 200px;
+				background: green;
+				display: grid;
+				grid-template-columns: 1fr 1fr;
+				grid-template-rows: 1fr 1fr;
+			}
+			.test-square__block:first-child,
+			.test-square__block:last-child {
+				background: red;
+			}
+			.test-square--css-animation {
+				margin-right: 50px;
+				animation-name: spin;
+				animation-timing-function: linear;
+				animation-iteration-count: infinite;
+				margin-right: 100px;
+			}
+			.test-square--raf {
+				
+			}
+			.toggle-button {
+				background: white;
+				height: 48px;
+				border: 0;
+				box-shadow: 0 1px 2px 0 rgba(60,64,67,0.302), 0 1px 3px 1px rgba(60,64,67,0.149);
+				border-radius: 24px;
+				font-family: Roboto, sans-serif;
+				outline: none;
+				cursor: pointer;
+				transition: all .2s ease-out;
+				padding: 0 2em 0 55px;
+				background-size: 20px;
+				background-repeat: no-repeat;
+				background-position: center left 16px;
+				font-weight: 500;
+				font-size: 16px;
+				color: rgba(0,0,0,0.7);
+			}
+			.toggle-button:hover {
+				box-shadow: 0 1px 3px 0 rgba(60,64,67,0.302), 0 4px 8px 3px rgba(60,64,67,0.149);
+			}
+			.raf-fps {
+				margin-left: auto;
+				font-size: 30px;
+				font-weight: 300;
+				grid-row: 1;
+			}
+			.raf-fps__hz {
+				font-weight: bold;
+			}
+			.speed-button {
+				margin-right: 12px;
+			}
+			.speed-button--slow {
+				background-image: url(images/speed--slow.svg);
+			}
+			.speed-button--moderate {
+				background-image: url(images/speed--moderate.svg);
+			}
+			.speed-button--fast {
+				background-image: url(images/speed--fast.svg);
+			}
+			.ripple-button {
+				position: relative;
+				overflow: hidden;
+				-webkit-user-select: none;
+				-ms-user-select: none;
+				-moz-user-select: none;
+				user-select: none;
+				opacity: .99; /** Hack to get overflow:hidden to work on iOS */
+			}
+
+			.ripple {
+				transition: transform .2s ease-out, opacity .5s ease-out;
+				position: absolute;
+				border-radius: 50%;
+				pointer-events: none;
+			}
+			.sonic-scroll {
+				width: 640px;
+				height: 448px;
+				overflow: hidden;
+			}
+			.sonic-scroll:first-child {
+				margin-bottom: 20px;
+			}
+			.sonic-bknd {
+				background-image: url(images/sonic-bknd.png);
+				background-repeat: repeat no-repeat;
+				background-size: contain;
+				image-rendering: pixelated;
+				height: 100%;
+				width: 1920px;
+			}
+			.sonic-bknd--css-animation {
+				animation-name: scroll-sonic;
+				animation-timing-function: linear;
+				animation-iteration-count: infinite;
+				width: 64000px;
+			}
+			.animation-button {
+				margin-right: 12px;
+			}
+			.cube-wrapper {
+				perspective: 800px;
+				perspective-origin: 50% 100px;
+			}
+			.cube {
+				position: relative;
+				width: 200px;
+				transform-style: preserve-3d;
+				animation-name: spin-cube;
+				animation-timing-function: linear;
+				animation-iteration-count: infinite;
+			}
+			.cube div {
+				position: absolute;
+				width: 200px;
+				height: 200px;
+			}
+			.back {
+				transform: translateZ(-100px) rotateY(180deg);
+				background: red;
+			}
+			.right {
+				transform: rotateY(-270deg) translateX(100px);
+				transform-origin: top right;
+				background: green;
+			}
+			.left {
+				transform: rotateY(270deg) translateX(-100px);
+				transform-origin: center left;
+				background: green;
+			}
+			.top {
+				transform: rotateX(-90deg) translateY(-100px);
+				transform-origin: top center;
+				background: purple;
+			}
+			.bottom {
+				transform: rotateX(90deg) translateY(100px);
+				transform-origin: bottom center;
+				background: purple;
+			}
+			.front {
+				transform: translateZ(100px);
+				background: red;
+			}
+			.cube-wrapper--css-animation {
+				margin-right: 380px;
+			}
+			.speed-buttons {
+				grid-row: 1;
+				white-space: nowrap;
+			}
+			.animation-buttons {
+				grid-row: 2;
+				white-space: nowrap;
+			}
+			@media screen and (min-width: 1300px) {
+				.topbar {
+					grid-template-rows: 1fr;
+					grid-template-columns: min-content min-content auto;
+				}
+				.speed-buttons {
+					grid-row: 1;
+				}
+				.animation-buttons {
+					grid-row: 1;
+				}
+			}
+		</style>
+	</head>
+	<body>
+		<div class="topbar">
+			<div class="speed-buttons">
+				<button type="button" class="toggle-button speed-button speed-button--slow">Slow</button>
+				<button type="button" class="toggle-button speed-button speed-button--moderate">Faster</button>
+				<button type="button" class="toggle-button speed-button speed-button--fast">Fastest</button>
+			</div>
+			<div class="animation-buttons">
+				<button type="button" class="toggle-button animation-button animation-button--spinning-squares">Spinning Squares</button>			
+				<button type="button" class="toggle-button animation-button animation-button--sonic">Sonic</button>			
+				<button type="button" class="toggle-button animation-button animation-button--spinning-cubes">Spinning Cubes</button>
+			</div>
+			<div class="raf-fps">rAF hz: <span class="raf-fps__hz"></span></div>
+		</div>
+		<div class="test-area"></div>
+		<!-- <script src="Ripple.js"></script> -->
+		<!-- <script src="RippleButton.js"></script> -->
+		<!-- <script src="Animator.js"></script> -->
+		<!-- <script src="SonicAnimator.js"></script> -->
+		<!-- <script src="SquareSpinAnimator.js"></script> -->
+		<!-- <script src="CubeAnimator.js"></script> -->
+		<script src="main.js" type="module"></script>
+	</body>
+</html>
